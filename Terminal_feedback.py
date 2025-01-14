@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 from flask import Flask
+import mysql.connector
 
 
 dataset=pd.read_csv(r"C:\Users\a\Desktop\AI-NARESHIT\JANUARY\2nd - NLP project\2nd - NLP project\4.CUSTOMERS REVIEW DATASET\Restaurant_Reviews.tsv",delimiter = '\t', quoting = 3)
@@ -56,3 +57,19 @@ processed_string=in_string(string)
 result = cv.transform([processed_string]).toarray()
 ans = classifier.predict(result)
 print('predicted sentiment:','Possitive' if ans[0]==1 else 'Negative')
+try:
+    conn=mysql.connector.connect(
+    host="localhost",
+    user='root',
+    password='root',
+    database='j_db'
+    )
+    cursor=conn.cursor()
+    if conn.is_connected():
+        print('Connected to sql')
+        cursor.execute('select * from country')
+        for row in cursor.fetchall():
+            print(row)
+
+except Exception as e :
+    print(f'error occured {e}')
